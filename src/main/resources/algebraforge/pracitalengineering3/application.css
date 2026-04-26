@@ -1,0 +1,12 @@
+.scroll-pane > .viewport{
+    -fx-background-color: transparent;
+}
+
+.scroll-pane{
+    -fx-background-color: transparent;
+}
+
+.chart-symbol{
+    -fx-background-radius: 2px;
+    -fx-padding: 2px;
+}
