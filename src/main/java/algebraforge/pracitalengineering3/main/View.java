@@ -1,6 +1,8 @@
 package algebraforge.pracitalengineering3.main;
 
 import algebraforge.pracitalengineering3.components.*;
+import algebraforge.pracitalengineering3.methods.Method;
+import algebraforge.pracitalengineering3.util.ItemBinding;
 import algebraforge.pracitalengineering3.util.ProcessorData;
 import algebraforge.pracitalengineering3.util.Style;
 import javafx.geometry.Insets;
@@ -9,6 +11,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+
+import java.util.List;
 
 class View extends VBox {
     public HBox getMethodPanel() {
@@ -22,6 +26,10 @@ class View extends VBox {
     }
 
 
+    public SecondaryButton getStartButton() {
+        return startButton;
+    }
+
     private final SecondaryButton startButton = new SecondaryButton("Старт");
 
 
@@ -32,30 +40,56 @@ class View extends VBox {
     }
 
 
+    public InputProcessor getMaxWeightInput() {
+        return maxWeightInput;
+    }
+
     private final InputProcessor maxWeightInput = new InputProcessor(ProcessorData.createPositiveProcessor("W >= 0"));
 
 
-    private final NormalText optimalItemsText = new NormalText("Оптимальна вибірка речей: []");
+    public void showOptimalItems(List<Item> items) {
+        optimalItemsText.setText("Оптимальна вибірка речей: " + ItemBinding.convertItemsToString(items));
+    }
+
+    private final NormalText optimalItemsText = new NormalText();
 
     {
         HBox.setMargin(optimalItemsText, new Insets(8, 0, 0, 0));
     }
 
 
-    private final SecondaryButton stopButton = new SecondaryButton("Стоп");
+    public SecondaryButton getCancelButton() {
+        return cancelButton;
+    }
+
+    private final SecondaryButton cancelButton = new SecondaryButton("Скасувати");
 
 
-    private final NormalText totalWeight = new NormalText("Загальна вага: ");
+    public void showTotalWeight(double totalWeight) {
+        this.totalWeight.setText("Загальна вага: " + totalWeight);
+    }
 
-    private final NormalText totalValue = new NormalText("Загальна цінність: ");
+    private final NormalText totalWeight = new NormalText();
 
-    private final NormalText totalTime = new NormalText("Час обчислення: ");
+
+    public void showTotalValue(double totalValue) {
+        this.totalValue.setText("Загальна цінність: " + totalValue);
+    }
+
+    private final NormalText totalValue = new NormalText();
+
+
+    public void showTotalTime(double time) {
+        totalTime.setText("Час обчислення: " + time);
+    }
+
+    private final NormalText totalTime = new NormalText();
 
 
     private final VBox solutionPanel = new VBox();
 
     {
-        HBox firstLine = new HBox(startButton, new Filler(), maxWeightMessage, maxWeightInput, new Filler(), optimalItemsText, new Filler(), stopButton);
+        HBox firstLine = new HBox(startButton, new Filler(), maxWeightMessage, maxWeightInput, new Filler(), optimalItemsText, new Filler(), cancelButton);
         firstLine.setMaxWidth(Double.MAX_VALUE);
         firstLine.setSpacing(8);
 
@@ -70,13 +104,25 @@ class View extends VBox {
         solutionPanel.setPadding(Style.normalPadding);
     }
 
+    public void setMethod(Method method) {
+        methodAlgorithmContent.getChildren().clear();
+        methodAlgorithmContent.getChildren().add(method.getView());
+    }
 
-    private final VBox problemPanel = new VBox(solutionPanel);
+
+    private final HBox methodAlgorithmContent = new HBox();
+
+    {
+        VBox.setVgrow(methodAlgorithmContent, Priority.ALWAYS);
+    }
+
+    private final VBox problemPanel = new VBox(methodAlgorithmContent, solutionPanel);
 
     {
         problemPanel.setAlignment(Pos.BOTTOM_CENTER);
         problemPanel.setMaxWidth(Double.MAX_VALUE);
         problemPanel.setFillWidth(true);
+
         HBox.setHgrow(problemPanel, Priority.ALWAYS);
     }
 

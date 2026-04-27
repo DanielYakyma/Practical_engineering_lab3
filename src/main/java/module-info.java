@@ -4,7 +4,7 @@ module algebraforge.pracitalengineering3 {
     requires devtoolsfx.gui;
     requires org.girod.javafx.svgimage;
 
+    opens algebraforge.pracitalengineering3 to javafx.graphics;
 
-    opens algebraforge.pracitalengineering3 to javafx.fxml;
-    exports algebraforge.pracitalengineering3;
+    exports algebraforge.pracitalengineering3.util;
 }

@@ -9,9 +9,11 @@ import javafx.stage.Stage;
 import java.util.Objects;
 
 public class MainApplication extends Application {
+    public static MainController main;
+
     @Override
     public void start(Stage stage) {
-        MainController main = new MainController();
+        main = new MainController();
 
         Scene scene = new Scene(main.getView(), 320, 240);
         scene.getStylesheets().add(

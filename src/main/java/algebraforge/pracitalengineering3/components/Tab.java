@@ -1,5 +1,6 @@
 package algebraforge.pracitalengineering3.components;
 
+import algebraforge.pracitalengineering3.methods.Method;
 import algebraforge.pracitalengineering3.util.Style;
 import javafx.beans.binding.When;
 import javafx.beans.property.BooleanProperty;
@@ -31,7 +32,16 @@ public class Tab extends HBox {
     private final Text text;
 
 
-    public Tab(String name) {
+    public Method getMethod(){
+        return method;
+    }
+
+    private final Method method;
+
+
+    public Tab(String name, Method method) {
+        this.method = method;
+
         text = new Text(name);
         text.setFont(Style.headlineMedium);
 

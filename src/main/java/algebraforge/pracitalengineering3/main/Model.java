@@ -2,6 +2,8 @@ package algebraforge.pracitalengineering3.main;
 
 import algebraforge.pracitalengineering3.components.Item;
 import algebraforge.pracitalengineering3.components.Tab;
+import algebraforge.pracitalengineering3.methods.BruteForceMethod;
+import algebraforge.pracitalengineering3.methods.Method;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,8 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 class Model {
     public void createItem() {
@@ -34,7 +35,12 @@ class Model {
         selectedItemIndex = -1;
     }
 
+    public List<Item> getItems() {
+        return items;
+    }
+
     private final List<Item> items = new ArrayList<>();
+
 
     private int selectedItemIndex = -1;
 
@@ -54,14 +60,21 @@ class Model {
 
     private final ObservableList<Node> itemViewChildren = FXCollections.observableArrayList();
 
+    private final LinkedHashMap<String, Method> methods = new LinkedHashMap<>();
 
-    private final String[] methodNames = {"Метод грубої сили", "Рекурсивний метод", "Метод динамічного програмування", "Жадібний алгоритм", "Метод гілок"};
+    {
+        methods.put("Метод грубої сили", new BruteForceMethod());
+        methods.put("Рекурсивний метод", new BruteForceMethod());
+        methods.put("Метод динамічного програмування", new BruteForceMethod());
+        methods.put("Жадібний алгоритм", new BruteForceMethod());
+        methods.put("Метод гілок", new BruteForceMethod());
+    }
 
     public Tab[] getMethodTabs() {
         return methodTabs;
     }
 
-    private final Tab[] methodTabs = new Tab[5];
+    private final Tab[] methodTabs = new Tab[methods.size()];
 
 
     private int selectedTabIndex = 0;
@@ -70,20 +83,36 @@ class Model {
         methodTabs[selectedTabIndex].setActive(false);
         selectedTabIndex = index;
         methodTabs[index].setActive(true);
+        parent.setMethod(methodTabs[index].getMethod());
     }
 
-    public Model() {
-        for (int i = 0; i < methodNames.length; i++) {
-            Tab newTab = new Tab(methodNames[i]);
+    private final MainController parent;
 
-            int finalI = i;
+    public Model(MainController parent) {
+        this.parent = parent;
+
+        int index = 0;
+        for (var entry : methods.entrySet()) {
+            Tab newTab = new Tab(entry.getKey(), entry.getValue());
+
+            int finalI = index;
             newTab.setOnMouseClicked(_ -> setSelectedTabIndex(finalI));
-            methodTabs[i] = newTab;
+            methodTabs[index] = newTab;
 
             HBox.setHgrow(newTab, Priority.ALWAYS);
+
+            index++;
         }
 
-        methodTabs[0].setActive(true);
+        setSelectedTabIndex(0);
+    }
+
+    public void startCurrentMethod() {
+        methodTabs[selectedTabIndex].getMethod().start();
+    }
+
+    public void cancelCurrentMethod() {
+        methodTabs[selectedTabIndex].getMethod().cancel();
     }
 
 }

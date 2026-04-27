@@ -30,6 +30,16 @@ public class Item extends HBox {
         number.setFont(Style.headlineMedium);
     }
 
+
+    public double getWeight() {
+        return weightInput.getDoubleValue();
+    }
+
+    public double getValue() {
+        return valueInput.getDoubleValue();
+    }
+
+
     private final InputProcessor weightInput = new InputProcessor(ProcessorData.createPositiveProcessor("w >= 0"));
     private final InputProcessor valueInput = new InputProcessor(ProcessorData.createPositiveProcessor("v >= 0"));
 
