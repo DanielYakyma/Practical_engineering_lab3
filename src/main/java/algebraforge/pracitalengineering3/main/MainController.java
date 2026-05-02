@@ -87,4 +87,8 @@ public class MainController {
 
         view.showTotalTime(solution.totalTime);
     }
+
+    void setMaxWeight(Number value) {
+        view.getMaxWeightInput().setValue(String.valueOf(value));
+    }
 }

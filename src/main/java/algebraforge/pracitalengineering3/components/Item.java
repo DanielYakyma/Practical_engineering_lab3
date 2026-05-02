@@ -24,19 +24,36 @@ public class Item extends HBox {
         return number.textProperty();
     }
 
+    public int getNumber() {
+        return Integer.parseInt(number.getText());
+    }
+
+
     private final NormalText number = new NormalText();
 
     {
         number.setFont(Style.headlineMedium);
     }
 
+    public void setWeight(Number weight) {
+        weightInput.setValue(String.valueOf(weight));
+    }
 
     public double getWeight() {
         return weightInput.getDoubleValue();
     }
 
+
+    public void setValue(Number value) {
+        valueInput.setValue(String.valueOf(value));
+    }
+
     public double getValue() {
         return valueInput.getDoubleValue();
+    }
+
+    public double getRatio() {
+        return valueInput.getDoubleValue() / weightInput.getDoubleValue();
     }
 
 

@@ -2,8 +2,8 @@ package algebraforge.pracitalengineering3.main;
 
 import algebraforge.pracitalengineering3.components.Item;
 import algebraforge.pracitalengineering3.components.Tab;
-import algebraforge.pracitalengineering3.methods.BruteForceMethod;
-import algebraforge.pracitalengineering3.methods.Method;
+import algebraforge.pracitalengineering3.methods.*;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,11 +11,33 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.util.Pair;
 
 import java.util.*;
 
 class Model {
-    public void createItem() {
+    private final List<Pair<Number, Number>> vector = new ArrayList<>(List.of(
+            new Pair<>(7, 12),
+            new Pair<>(3, 14),
+            new Pair<>(5, 3),
+            new Pair<>(2, 11),
+            new Pair<>(4, 9),
+            new Pair<>(4, 12),
+            new Pair<>(2, 11),
+            new Pair<>(4, 11)
+    ));
+
+    private void recreateDefaultItems(List<Pair<Number, Number>> vector) {
+        for (var pair : vector) {
+            Item newItem = createItem();
+
+            newItem.setWeight(pair.getKey());
+            newItem.setValue(pair.getValue());
+        }
+    }
+
+
+    public Item createItem() {
         Item newItem = new Item();
 
         newItem.getNumberProperty().bind(Bindings.createStringBinding(
@@ -25,6 +47,8 @@ class Model {
         itemViewChildren.add(itemViewChildren.size() - 1, newItem);
 
         newItem.addEventFilter(MouseEvent.MOUSE_CLICKED, _ -> setSelectedItemIndex(items.indexOf(newItem)));
+
+        return newItem;
     }
 
     public void deleteSelectedItem() {
@@ -64,10 +88,10 @@ class Model {
 
     {
         methods.put("Метод грубої сили", new BruteForceMethod());
-        methods.put("Рекурсивний метод", new BruteForceMethod());
-        methods.put("Метод динамічного програмування", new BruteForceMethod());
-        methods.put("Жадібний алгоритм", new BruteForceMethod());
-        methods.put("Метод гілок", new BruteForceMethod());
+        methods.put("Рекурсивний метод", new RecursiveMethod());
+        methods.put("Метод динамічного програмування", new DynamicMethod());
+        methods.put("Жадібний алгоритм", new GreedyMethod());
+        methods.put("Метод гілок", new BranchMethod());
     }
 
     public Tab[] getMethodTabs() {
@@ -105,6 +129,14 @@ class Model {
         }
 
         setSelectedTabIndex(0);
+
+        Platform.runLater(()-> {
+            setSelectedItemIndex(0);
+            deleteSelectedItem();
+
+            recreateDefaultItems(vector);
+            parent.setMaxWeight(26);
+        });
     }
 
     public void startCurrentMethod() {

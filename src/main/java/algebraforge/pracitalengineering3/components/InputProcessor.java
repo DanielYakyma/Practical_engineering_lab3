@@ -34,6 +34,10 @@ public class InputProcessor extends VBox {
         message.setFill(Style.red800);
     }
 
+    public void setValue(String string) {
+        inputField.setText(string);
+    }
+
     private final TextBox inputField = new TextBox();
 
     public InputProcessor(ProcessorData data) {

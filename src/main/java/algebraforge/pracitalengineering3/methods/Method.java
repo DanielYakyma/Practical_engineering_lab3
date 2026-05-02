@@ -1,9 +1,13 @@
 package algebraforge.pracitalengineering3.methods;
 
 import algebraforge.pracitalengineering3.MainApplication;
+import algebraforge.pracitalengineering3.components.Item;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.scene.Node;
+
+import java.util.Comparator;
+import java.util.List;
 
 public abstract class Method {
     protected final int DELAY = 250;
@@ -30,11 +34,14 @@ public abstract class Method {
 
                     solution.totalTime = (System.nanoTime() - startTime) / 1_000_000_000.0;
 
+                    solution.optimalItems.sort(Comparator.comparing(Item::getNumber));
+
                     return solution;
                 }
             };
         }
     };
+
 
     public Method() {
         service.setOnSucceeded(_ -> MainApplication.main.setSolution(service.getValue()));
@@ -49,7 +56,7 @@ public abstract class Method {
         service.restart();
     }
 
-    public final void cancel(){
+    public final void cancel() {
         service.cancel();
     }
 }

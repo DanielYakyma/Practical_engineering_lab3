@@ -4,7 +4,6 @@ import algebraforge.pracitalengineering3.MainApplication;
 import algebraforge.pracitalengineering3.components.Filler;
 import algebraforge.pracitalengineering3.components.Item;
 import algebraforge.pracitalengineering3.components.LargeText;
-import algebraforge.pracitalengineering3.components.NormalText;
 import algebraforge.pracitalengineering3.util.ItemBinding;
 import algebraforge.pracitalengineering3.util.Style;
 import javafx.beans.binding.Bindings;
@@ -14,7 +13,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Worker;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 
@@ -54,9 +52,6 @@ public class BruteForceMethod extends Method {
     Solution findSolution() throws InterruptedException {
         Solution solution = new Solution();
 
-        List<Item> items = MainApplication.main.getItems();
-        double maxWeight = MainApplication.main.getMaximalWeight();
-
         optimalItems.clear();
         totalWeight.set(0);
         totalValue.set(0);
@@ -66,6 +61,9 @@ public class BruteForceMethod extends Method {
         currentItems.clear();
         currentWeight.set(0);
         currentValue.set(0);
+
+        List<Item> items = MainApplication.main.getItems();
+        double maxWeight = MainApplication.main.getMaximalWeight();
 
         for (int i = 0; i < (1 << items.size()); i++) {
             List<Item> currentItems = new ArrayList<>();
