@@ -25,7 +25,7 @@ public class MainApplication extends Application {
 
         scene.getAccelerators().putAll(main.getAccelerators());
 
-        GUI.openToolStage(stage, getHostServices());
+        //GUI.openToolStage(stage, getHostServices());
     }
 
     public static void main(String[] args) {

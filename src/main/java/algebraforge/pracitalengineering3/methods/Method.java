@@ -31,6 +31,9 @@ public abstract class Method {
                             return null;
                         }
                     }
+                    catch(RuntimeException e){
+                        e.printStackTrace();
+                    }
 
                     solution.totalTime = (System.nanoTime() - startTime) / 1_000_000_000.0;
 
