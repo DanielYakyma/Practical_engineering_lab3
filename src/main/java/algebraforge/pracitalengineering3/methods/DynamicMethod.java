@@ -18,7 +18,7 @@ import java.util.List;
 
 public class DynamicMethod extends Method {
     static class Cell {
-        void setValue(double value, double weight, List<Item> optimalItems) {
+        void setValue(int value, int weight, List<Item> optimalItems) {
             this.value = value;
             this.weight = weight;
 
@@ -34,8 +34,8 @@ public class DynamicMethod extends Method {
 
         private List<Item> optimalItems = new ArrayList<>();
 
-        double value = 0;
-        double weight = 0;
+        int value = 0;
+        int weight = 0;
 
         private final NormalText text = new NormalText("0");
 
@@ -58,12 +58,12 @@ public class DynamicMethod extends Method {
     Solution findSolution() throws InterruptedException {
         Solution solution = new Solution();
 
-        iteration.set(0);
+        Platform.runLater(() -> iteration.set(0));
 
         List<Item> items = MainApplication.main.getItems();
-        final double maxWeight = MainApplication.main.getMaximalWeight();
+        final int maxWeight = MainApplication.main.getMaximalWeight();
 
-        int height = maxWeight == Math.floor(maxWeight) ? (int) maxWeight + 1 : (int) Math.ceil(maxWeight);
+        int height = maxWeight + 1;
 
         Cell[][] elements = new Cell[items.size() + 1][height];
 
@@ -87,7 +87,7 @@ public class DynamicMethod extends Method {
             Item currentItem = items.get(i - 1);
 
             for (int w = 0; w < height; w++) {
-                iteration.set(iteration.get() + 1);
+                Platform.runLater(() -> iteration.set(iteration.get() + 1));
 
                 Thread.sleep(DELAY);
                 if (w < currentItem.getWeight()) {
@@ -95,9 +95,9 @@ public class DynamicMethod extends Method {
                     continue;
                 }
 
-                double without = elements[i - 1][w].value;
-                Cell withCell = elements[i - 1][w - (int) currentItem.getWeight()];
-                double with = withCell.value + currentItem.getValue();
+                int without = elements[i - 1][w].value;
+                Cell withCell = elements[i - 1][w - currentItem.getWeight()];
+                int with = withCell.value + currentItem.getValue();
 
                 Thread.sleep(DELAY);
                 if (without >= with) {

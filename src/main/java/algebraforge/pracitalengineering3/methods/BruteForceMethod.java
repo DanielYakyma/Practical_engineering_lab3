@@ -6,6 +6,7 @@ import algebraforge.pracitalengineering3.components.Item;
 import algebraforge.pracitalengineering3.components.LargeText;
 import algebraforge.pracitalengineering3.util.ItemBinding;
 import algebraforge.pracitalengineering3.util.Style;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -52,15 +53,17 @@ public class BruteForceMethod extends Method {
     Solution findSolution() throws InterruptedException {
         Solution solution = new Solution();
 
-        optimalItems.clear();
-        totalWeight.set(0);
-        totalValue.set(0);
+        Platform.runLater(()->{
+            optimalItems.clear();
+            totalWeight.set(0);
+            totalValue.set(0);
 
-        iteration.set(0);
+            iteration.set(0);
 
-        currentItems.clear();
-        currentWeight.set(0);
-        currentValue.set(0);
+            currentItems.clear();
+            currentWeight.set(0);
+            currentValue.set(0);
+        });
 
         List<Item> items = MainApplication.main.getItems();
         double maxWeight = MainApplication.main.getMaximalWeight();
@@ -70,7 +73,8 @@ public class BruteForceMethod extends Method {
             double currentWeight = 0;
             double currentValue = 0;
 
-            this.iteration.set(i);
+            int finalI = i;
+            Platform.runLater(()->this.iteration.set(finalI));
 
             Thread.sleep(DELAY);
 
@@ -85,15 +89,20 @@ public class BruteForceMethod extends Method {
 
             Thread.sleep(DELAY);
 
-            this.currentItems.setAll(currentItems);
-            this.currentWeight.set(currentWeight);
-            this.currentValue.set(currentValue);
+            double finalCurrentWeight = currentWeight;
+            double finalCurrentValue = currentValue;
 
-            if (currentWeight <= maxWeight && currentValue > totalValue.get()) {
-                optimalItems.setAll(currentItems);
-                totalWeight.set(currentWeight);
-                totalValue.set(currentValue);
-            }
+            Platform.runLater(()->{
+                this.currentItems.setAll(currentItems);
+                this.currentWeight.set(finalCurrentWeight);
+                this.currentValue.set(finalCurrentValue);
+
+                if (finalCurrentWeight <= maxWeight && finalCurrentValue > totalValue.get()) {
+                    optimalItems.setAll(currentItems);
+                    totalWeight.set(finalCurrentWeight);
+                    totalValue.set(finalCurrentValue);
+                }
+            });
         }
 
         solution.optimalItems = optimalItems;

@@ -39,8 +39,8 @@ public class Item extends HBox {
         weightInput.setValue(String.valueOf(weight));
     }
 
-    public double getWeight() {
-        return weightInput.getDoubleValue();
+    public int getWeight() {
+        return weightInput.getIntegerValue();
     }
 
 
@@ -48,8 +48,8 @@ public class Item extends HBox {
         valueInput.setValue(String.valueOf(value));
     }
 
-    public double getValue() {
-        return valueInput.getDoubleValue();
+    public int getValue() {
+        return valueInput.getIntegerValue();
     }
 
     public double getRatio() {

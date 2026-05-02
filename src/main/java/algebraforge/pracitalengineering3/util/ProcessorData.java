@@ -14,7 +14,7 @@ public abstract class ProcessorData {
         return new ProcessorData(message) {
             @Override
             public Number process(String input) {
-                double value = Double.parseDouble(input);
+                double value = Integer.parseInt(input);
 
                 if (value < 0)
                     throw new RuntimeException();

@@ -10,6 +10,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +21,8 @@ public class MainController {
     }
 
 
-    public double getMaximalWeight() {
-        return view.getMaxWeightInput().getDoubleValue();
+    public int getMaximalWeight() {
+        return view.getMaxWeightInput().getIntegerValue();
     }
 
 
@@ -29,7 +30,7 @@ public class MainController {
 
 
     public List<Item> getItems() {
-        return model.getItems();
+        return new ArrayList<>(model.getItems());
     }
 
     private final Model model = new Model(this);

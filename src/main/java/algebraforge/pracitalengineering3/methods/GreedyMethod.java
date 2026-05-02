@@ -5,6 +5,7 @@ import algebraforge.pracitalengineering3.components.Item;
 import algebraforge.pracitalengineering3.components.LargeText;
 import algebraforge.pracitalengineering3.util.ItemBinding;
 import algebraforge.pracitalengineering3.util.Style;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -44,30 +45,38 @@ public class GreedyMethod extends Method {
 
         Solution solution = new Solution();
 
-        optimalItems.clear();
-        totalWeight.set(0);
-        totalValue.set(0);
+        Platform.runLater(() -> {
+            optimalItems.clear();
+            totalWeight.set(0);
+            totalValue.set(0);
 
-        iteration.set(0);
+            iteration.set(0);
+        });
 
         double newWeight = 0;
         double newValue = 0;
 
         for (int i = 0; i < items.size(); i++) {
-            iteration.set(i);
+            int finalI = i;
+            Platform.runLater(() -> iteration.set(finalI));
 
             newWeight += items.get(i).getWeight();
             newValue += items.get(i).getValue();
 
             if (newWeight <= maxWeight) {
-                totalValue.set(newValue);
-                totalWeight.set(newWeight);
-                optimalItems.add(items.get(i));
+                double finalNewValue = newValue;
+                double finalNewWeight = newWeight;
+
+                Platform.runLater(() -> {
+                    totalValue.set(finalNewValue);
+                    totalWeight.set(finalNewWeight);
+                    optimalItems.add(items.get(finalI));
+                });
             } else {
                 break;
             }
 
-            Thread.sleep(2*DELAY);
+            Thread.sleep(DELAY);
         }
 
         solution.optimalItems = new ArrayList<>(optimalItems);

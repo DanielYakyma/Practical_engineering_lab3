@@ -2,15 +2,15 @@ package algebraforge.pracitalengineering3.methods;
 
 import algebraforge.pracitalengineering3.MainApplication;
 import algebraforge.pracitalengineering3.components.Item;
+import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.scene.Node;
 
 import java.util.Comparator;
-import java.util.List;
 
 public abstract class Method {
-    protected final int DELAY = 250;
+    protected final int DELAY = 10;
 
     protected final Service<Solution> service = new Service<>() {
         @Override
@@ -47,7 +47,7 @@ public abstract class Method {
 
 
     public Method() {
-        service.setOnSucceeded(_ -> MainApplication.main.setSolution(service.getValue()));
+        service.setOnSucceeded(_ -> Platform.runLater(() -> MainApplication.main.setSolution(service.getValue())));
     }
 
     abstract Solution findSolution() throws InterruptedException;
