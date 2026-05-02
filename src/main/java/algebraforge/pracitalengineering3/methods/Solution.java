@@ -11,4 +11,16 @@ public class Solution {
     public double totalWeight = 0;
     public double totalValue = 0;
     public double totalTime = 0;
+
+    public Solution(){
+
+    }
+
+    public Solution(Solution solution) {
+        optimalItems = new ArrayList<>(solution.optimalItems);
+
+        totalWeight = solution.totalWeight;
+        totalValue = solution.totalValue;
+        totalTime = solution.totalTime;
+    }
 }
