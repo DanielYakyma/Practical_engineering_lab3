@@ -18,6 +18,9 @@ import java.util.List;
 
 public class DynamicMethod extends Method {
     static class Cell {
+        private final Background changedBackground = Style.createBackgroundFill(Style.green300);
+        private final Background readBackground = Style.createBackgroundFill(Style.blue300);
+
         void setValue(int value, int weight, List<Item> optimalItems) {
             this.value = value;
             this.weight = weight;
@@ -45,6 +48,18 @@ public class DynamicMethod extends Method {
             pane.setPadding(Style.largePadding);
             pane.setBorder(Style.normalBorder);
         }
+
+        public void setChangedStyle() {
+            pane.setBackground(changedBackground);
+        }
+
+        public void setReadStyle() {
+            pane.setBackground(readBackground);
+        }
+
+        public void setDefaultStyle() {
+            pane.setBackground(null);
+        }
     }
 
     private final IntegerProperty iteration = new SimpleIntegerProperty();
@@ -52,6 +67,10 @@ public class DynamicMethod extends Method {
     public DynamicMethod() {
         iterationText.textProperty().bind(Bindings.concat("Ітерація: ", iteration));
     }
+
+
+    private final List<Cell> previousReadCells = new ArrayList<>();
+    private final List<Cell> previousChangedCells = new ArrayList<>();
 
 
     @Override
@@ -91,9 +110,17 @@ public class DynamicMethod extends Method {
 
                 Thread.sleep(DELAY);
                 if (w < currentItem.getWeight()) {
+                    clearPreviousStyles();
+                    addChangedCell(elements[i][w]);
+                    addReadCell(elements[i - 1][w]);
+
                     elements[i][w].setCell(elements[i - 1][w]);
                     continue;
                 }
+                clearPreviousStyles();
+                addChangedCell(elements[i][w]);
+                addReadCell(elements[i - 1][w]);
+                addReadCell(elements[i - 1][w - currentItem.getWeight()]);
 
                 int without = elements[i - 1][w].value;
                 Cell withCell = elements[i - 1][w - currentItem.getWeight()];
@@ -110,6 +137,8 @@ public class DynamicMethod extends Method {
             }
         }
 
+        clearPreviousStyles();
+
         Cell lastCell = elements[items.size()][height - 1];
 
         solution.optimalItems = lastCell.optimalItems;
@@ -117,6 +146,35 @@ public class DynamicMethod extends Method {
         solution.totalWeight = lastCell.weight;
 
         return solution;
+    }
+
+    private void addReadCell(Cell cell) {
+        Platform.runLater(() -> {
+            previousReadCells.add(cell);
+            cell.setReadStyle();
+        });
+    }
+
+    private void addChangedCell(Cell cell) {
+        Platform.runLater(() -> {
+            previousChangedCells.add(cell);
+            cell.setChangedStyle();
+        });
+    }
+
+    private void clearPreviousStyles() {
+        Platform.runLater(() -> {
+            for (var cell : previousChangedCells) {
+                cell.setDefaultStyle();
+            }
+
+            for (var cell : previousReadCells) {
+                cell.setDefaultStyle();
+            }
+
+            previousChangedCells.clear();
+            previousReadCells.clear();
+        });
     }
 
     @Override

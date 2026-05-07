@@ -3,6 +3,7 @@ package algebraforge.pracitalengineering3.util;
 import javafx.geometry.Insets;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -94,6 +95,11 @@ public class Style {
 
     public static final Background pageBackground = new Background(new BackgroundFill(grey1, null, null));
     public static final Background surfaceBackground = new Background(new BackgroundFill(Style.grey2, null, null));
+
+    public static Background createBackgroundFill(Paint paint) {
+        return new Background(new BackgroundFill(paint, null, null));
+    }
+
 
     public static final Border normalBorder = new Border(new BorderStroke(
             Style.grey4,
